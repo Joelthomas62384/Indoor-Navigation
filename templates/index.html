@@ -43,26 +43,26 @@
         }
         const data = await response.json();
         
-        // Assuming the JSON response contains the image_base64 field
+        
         return data;
     } catch (error) {
         throw new Error("Error fetching image:", error);
     }
 }
-let currentUtterance = null; // Variable to store the current utterance
+let currentUtterance = null; 
 
-// Function to speak the provided text
+
 function speak(text, speed = 1, voice =  null) {
     const speechSynthesis = window.speechSynthesis;
     if (speechSynthesis) {
-        // Cancel any ongoing speech
+       
         cancelSpeech();
 
-        // Create a new utterance and set rate
+  
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = speed; // Adjust speech speed
+        utterance.rate = speed;
         
-        // Set voice if specified
+        
         if (voice) {
             const voices = speechSynthesis.getVoices();
             const selectedVoice = voices.find(v => v.name === voice);
@@ -75,7 +75,7 @@ function speak(text, speed = 1, voice =  null) {
 
         utterance.onend = () => {
              soundBtn.src = '{% static "assets/mic.png" %}';
-             // soundBtn.style.width="25px"
+            
             soundBtn.classList.remove('w-12')
             soundBtn.classList.add('w-7')
         };
@@ -84,7 +84,7 @@ function speak(text, speed = 1, voice =  null) {
         console.error("Speech synthesis not supported by the browser.");
     }
 }
-// Function to cancel ongoing speech
+
 function cancelSpeech() {
     const speechSynthesis = window.speechSynthesis;
     if (speechSynthesis && currentUtterance) {
@@ -110,27 +110,19 @@ function cancelSpeech() {
         commonwarn.innerHTML = "";
     }, 3000); 
         }
-        // else if (regex.test(from.value) || !regex.test(to.value)){
-            
-    //         commonwarn.innerHTML = "  **Characters only allowed"
-    //         setTimeout(function() {
-    //     commonwarn.innerHTML = "";
-    // }, 3000); 
-    //     }
+       
         else{
             try {
             let data = await fetchImage(from.value, to.value);
             console.log(data);
 
-            // Assuming the JSON response contains the image_base64 field
-            // let imgBase64 = data.image_base64;
+         
             hero.src = await `static/navigation_images/${data.image_filename}`
             sound = ""
             sound = data.directions.join(", then, ")
             sound += ", Thank You"
             route.innerHTML = sound 
-            // // Set the src attribute of the img tag to the Base64 encoded image data
-            // hero.src = imgBase64;
+            
         } catch (error) {
             console.error("Error fetching image:", error);
         }
@@ -142,14 +134,14 @@ function cancelSpeech() {
     function toggleImage() {
         let soundBtn = document.getElementById('soundBtn')
         if (soundBtn.src.endsWith('mic.png')) {
-            soundBtn.src = '{% static "assets/sound.gif" %}'; // Change to the second image
+            soundBtn.src = '{% static "assets/sound.gif" %}'; 
             speak(sound)
-            // soundBtn.style.width="40px"
+           
             soundBtn.classList.remove('w-7')
             soundBtn.classList.add('w-12')
         } else {
-            soundBtn.src = '{% static "assets/mic.png" %}'; // Change back to the first image
-            // soundBtn.style.width="25px"
+            soundBtn.src = '{% static "assets/mic.png" %}'; 
+            
             soundBtn.classList.remove('w-12')
             soundBtn.classList.add('w-7')
             cancelSpeech()
