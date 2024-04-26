@@ -126,7 +126,7 @@ function cancelSpeech() {
             // let imgBase64 = data.image_base64;
             hero.src = await `static/navigation_images/${data.image_filename}`
             sound = ""
-            sound = data.directions.join(" then ")
+            sound = data.directions.join(", then, ")
             route.innerHTML = sound
             // // Set the src attribute of the img tag to the Base64 encoded image data
             // hero.src = imgBase64;
