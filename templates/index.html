@@ -8,7 +8,9 @@
         <img class="object-cover object-center rounded" alt="hero" id="hero" src="{% static "assets/image.jpeg" %}">
         <div class="flex h-[50px] justify-around item-center my-4">
         <p class="mt-[25px] pl-[30px] text-white" id="route">The route will come here</p>
-            <img id='soundBtn' class="w-7 hover:cursor-pointer" onclick="toggleImage()" src="{% static "assets/mic.png" %}" alt="">
+        <div class="mx-auto">
+            <img id='soundBtn' class="w-7 hover:cursor-pointer " onclick="toggleImage()" src="{% static "assets/mic.png" %}" alt="">
+        </div>
         </div>
       </div>
       <div class="lg:w-2/6 md:w-1/2 bg-gray-800 bg-opacity-50 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
@@ -49,20 +51,16 @@
         throw new Error("Error fetching image:", error);
     }
 }
-let currentUtterance = null; 
+let currentUtterance = null;
 
-
-function speak(text, speed = 1, voice =  null) {
+function speak(text, speed = 1, voice = null) {
     const speechSynthesis = window.speechSynthesis;
     if (speechSynthesis) {
-       
-        cancelSpeech();
+        cancelSpeech(); // Cancel any ongoing speech
 
-  
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.rate = speed;
-        
-        
+
         if (voice) {
             const voices = speechSynthesis.getVoices();
             const selectedVoice = voices.find(v => v.name === voice);
@@ -74,11 +72,14 @@ function speak(text, speed = 1, voice =  null) {
         }
 
         utterance.onend = () => {
-             soundBtn.src = '{% static "assets/mic.png" %}';
+            // Handle speech ended event
+            soundBtn.src = '{% static "assets/mic.png" %}'; 
             
             soundBtn.classList.remove('w-12')
             soundBtn.classList.add('w-7')
         };
+        
+        currentUtterance = utterance; // Assign the current utterance
         speechSynthesis.speak(utterance);
     } else {
         console.error("Speech synthesis not supported by the browser.");
@@ -89,7 +90,7 @@ function cancelSpeech() {
     const speechSynthesis = window.speechSynthesis;
     if (speechSynthesis && currentUtterance) {
         speechSynthesis.cancel();
-        currentUtterance = null;
+        currentUtterance = null; // Reset the current utterance
     }
 }
 
